@@ -59,6 +59,7 @@ const Home = () => {
             <input type="text" placeholder="Job title or keyword" />
             <input type="text" placeholder="Set location" />
             <button className="search-button">Search</button>
+            <button className="search-button">Search Details</button>
           </div>
         </section>
       </div>
