@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px;
+  background-color: #fff;
+
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.home-link img {
+  margin-right: 5px;
+}
+
+.label-cum {
+  cursor: pointer;
+}
+
+.logo-image {
+  width: 20px;
+  padding-right: 10px;
+}
+
+.auth-links {
+  margin-left: auto;
+  color: #085587;
+}
+
+.auth-links a {
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.label-cum {
+  color: #085587;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.auth-links a {
+  color: #085587;
+  text-decoration: none;
+  margin: 0 5px;
+  font-weight: bold;
+  font-family: "Roboto", Arial, sans-serif;
+}
