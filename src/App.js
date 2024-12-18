@@ -1,8 +1,10 @@
 import AppRoutes from './routers/AppRoutes';
-import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import './App.css'
+
 function App() {
   return (
-    <div className="App">
+    <div className="app">
        <AppRoutes />
     </div>
   );

@@ -1,0 +1,137 @@
+.search-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    padding: 20px;
+    background: #f0f4f8;
+    min-height: 100vh; 
+    overflow-y: auto;
+}
+
+.search-detail-form {
+    margin-top: 20px;
+    background: linear-gradient(145deg, #fff, #d4d4d4);
+    box-shadow: 8px 8px 15px #c3c3c3, -8px -8px 15px #fff;
+    border-radius: 20px;
+    padding: 50px;
+    max-width: 900px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    position: relative;
+}
+
+.search-detail-form label {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.search-detail-form h2 {
+    text-align: center;
+    color: #007bff;
+    font-size: 36px;
+    font-weight: bold; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin-bottom: 20px; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    grid-column: span 2;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #e8e8e8;
+    box-shadow: inset 4px 4px 8px #c4c4c4, inset -4px -4px 8px #ffffff;
+    transition: box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    box-shadow: inset 2px 2px 4px #c4c4c4, inset -2px -2px 4px #fff, 0 0 5px #007bff;
+    outline: none;
+}
+
+.submit-button {
+    padding: 10px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #0056b3, -5px -5px 10px #007bff;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    grid-column: span 2;
+}
+
+.submit-button:hover {
+    transform: scale(1.05);
+}
+
+.result {
+    margin-top: 20px;
+    text-align: center;
+    color: #007bff;
+}
+
+.error-field input, .error-field select {
+    border-color: red;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+
+.search-detail-form {
+    position: relative;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-detail-form {
+    position: relative;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.back-button-top-right {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #5dade2; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.back-button-top-right:hover {
+    transform: scale(1.05);
+    background-color: #3498db;
+}
