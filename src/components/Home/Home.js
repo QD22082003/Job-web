@@ -27,10 +27,9 @@ const Home = () => {
     if (!keyword) return; // Kiểm tra nếu không có từ khóa thì không gọi API
 
     setLoading(true); // Đặt trạng thái loading
-
     try {
       const response = await axios.post(
-        "https://ms.vietnamworks.com/job-search/v1.0/search",
+        "http://localhost:3000/api/jobs/search",
         {
           keyword: keyword, // Gửi từ khóa vào body
         }
@@ -43,9 +42,11 @@ const Home = () => {
       setLoading(false); // Kết thúc trạng thái loading
     }
   };
-  const handleJobClick = (id) => {
-    navigate(`/detail/${id}`);
+  const handleJobClick = (companyName) => {
+    debugger
+    navigate(`/detail/${companyName}`);
   };
+  
   const navigate = useNavigate();
   return (
     <div className="home-container">
@@ -76,10 +77,10 @@ const Home = () => {
             </div>
 
             {/* Tìm kiếm địa điểm */}
-            <div className="input-with-icon">
+            {/* <div className="input-with-icon">
               <FaMapMarkerAlt size={15} color="#007bff" />
               <input type="text" placeholder="Chọn địa chỉ" />
-            </div>
+            </div> */}
             <button className="search-button" onClick={handleSearch}>
               Tìm kiếm
             </button>
@@ -137,27 +138,38 @@ const Home = () => {
         </div>
 
         {/* Featured Jobs */}
+        {/* Featured Jobs */}
         <div className="featured-jobs">
           <h3>Danh sách Job</h3>
-          <ul className="job-list">
-            {jobData.map((job) => (
-              <li key={job.id} onClick={() => handleJobClick(job.id)}>
-                <img src={job.companyLogo} alt={job.jobTitle} className="job-image" />
-                <div className="job-info">
-                  <p className="job-text">
-                    <FaBriefcase size={16} color="currentColor" /> {job.jobTitle}
-                  </p>
-                  <p className="cp-text">
-                    <FaBuilding size={12} color="#085587" /> {job.companyName}
-                  </p>
-                  <p className="ad-text">
-                    <FaMapMarkerAlt size={10} color="#085587" /> {job.address}
-                  </p>
-                </div>
-                <button className="salary-button"></button>
-              </li>
-            ))}
-          </ul>
+          {/* Hiển thị Đang tìm kiếm... khi loading */}
+          {loading ? (
+            <div className="loading-text">Đang tìm kiếm...</div>
+          ) : (
+            <ul className="job-list">
+              {jobData.map((job) => (
+                <li key={job.companyName} onClick={() => handleJobClick(job.companyName)}>
+                  <img
+                    src={job.companyLogo}
+                    alt={job.jobTitle}
+                    className="job-image"
+                  />
+                  <div className="job-info">
+                    <p className="job-text">
+                      <FaBriefcase size={16} color="currentColor" />{" "}
+                      {job.jobTitle}
+                    </p>
+                    <p className="cp-text">
+                      <FaBuilding size={12} color="#085587" /> {job.companyName}
+                    </p>
+                    <p className="ad-text">
+                      <FaMapMarkerAlt size={10} color="#085587" /> {job.address}
+                    </p>
+                  </div>
+                  <button className="salary-button">{job.prettySalary}</button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

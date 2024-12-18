@@ -18,7 +18,12 @@ input:focus {
     padding: 10px 20px;
     background-color: #fff;
   }
-  
+  .backCompany-image{
+    margin-top: 30px;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .auth-links a {
     color: #007bff;
     text-decoration: none;
@@ -54,9 +59,9 @@ input:focus {
   }
   .job-image{
     width: 70px;
-    height: 70px;
     margin-top: auto;
     margin-bottom: auto;
+    object-fit: cover;
   }
   
   .job-info-detail h2, .job-info-detail p {

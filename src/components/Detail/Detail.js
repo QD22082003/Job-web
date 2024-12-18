@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Detail.css";
+import axios from "axios";
 import { FaBriefcase, FaDollarSign } from "react-icons/fa";
 import {
   FaSearch,
@@ -7,15 +8,50 @@ import {
   FaIndustry,
   FaUsers,
   FaGlobe,
+  FaEye 
 } from "react-icons/fa";
 import Logo from "../../asset/image.png";
 import logoweb from "../../asset/1.png";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 const Detail = () => {
+  const { companyName } = useParams();
+  const [companyData, setCompanyData] = useState(null);
   const navigate = useNavigate();
   const handleCombackHome = () => {
     navigate(`/`);
   };
+  const fetchCompanyData = async () => {
+    debugger;
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/company/search",
+        {
+          keyword: companyName, // Gửi từ khóa vào body
+        }
+      );
+      // Lấy công ty đầu tiên từ danh sách trả về
+      if (response.data.data) {
+        setCompanyData(response.data.data);
+      } else {
+        console.error("Không tìm thấy công ty.");
+      }
+      console.log("Company data: " + companyData);
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
+  };
+
+  useEffect(() => {
+    debugger;
+
+    fetchCompanyData(companyName);
+  }, []);
+  useEffect(() => {
+    if (companyData) {
+      console.log("Company data thay đổi:", companyData);
+    }
+  }, [companyData]);
   return (
     <div className="detail-container">
       {/* Header */}
@@ -40,43 +76,53 @@ const Detail = () => {
             </div>
 
             {/* Tìm kiếm địa điểm */}
-            <div className="input-with-icon">
+            {/* <div className="input-with-icon">
               <FaMapMarkerAlt size={15} color="#007bff" />
               <input type="text" placeholder="Chọn địa chỉ" />
-            </div>
+            </div> */}
             <button className="search-button">Tìm kiếm</button>
-            <button className="search-button" >
+            <button className="search-button">
               Tìm kiếm theo thông tin chi tiết
             </button>
           </div>
         </section>
       </div>
-
+      <img
+        src={companyData?.bannerDesktopUri}
+        alt="Job"
+        className="backCompany-image"
+      />
       {/* Job Information */}
       <section className="job-header-detail">
-        <div className="job-info-detail">
-          <img src={Logo} alt="Job" className="job-image" />
+        <div
+          className="job-info-detail"
+          style={
+            {
+              // backgroundImage: `url(${companyData?.bannerDesktopUri})`, // Cập nhật ảnh nền
+            }
+          }
+        >
+          <img
+            src={companyData?.companyLogoURL}
+            alt="Job"
+            className="job-image"
+          />
           <div>
-            <p className="text-job-detail">
-              Chuyên viên Quản trị mạng truyền thông – Mã vị trí CNTT04 (số
-              lượng 02)
-            </p>
-            <p className="text-job-detail">
-              Trung tâm Công nghệ thông tin BIDV
-            </p>
+            <p className="text-job-detail">{companyData?.companyName}</p>
             <p className="location">
-              <FaMapMarkerAlt size={12} color="#085587" /> Tòa nhà A, số 18 Trần
-              Hữu Dực, Quận Hà Bà Trưng, Hà Nội
+              <FaMapMarkerAlt size={12} color="#085587" />{" "}
+              {companyData?.address}
             </p>
             <p className="salary">
-              <FaDollarSign size={12} color="#085587" /> 15,000,000 - 20,000,000
-              VND
+              <FaEye size={12} color="#085587" /> {companyData?.followerCount} Lượt quan tâm
             </p>
           </div>
         </div>
         <div className="job-actions">
           <button className="apply-btn">Ứng tuyển ngay</button>
-          <button className="create-cv-btn" onClick={handleCombackHome}>Quay lại trang chủ</button>
+          <button className="create-cv-btn" onClick={handleCombackHome}>
+            Quay lại trang chủ
+          </button>
         </div>
       </section>
 
@@ -88,20 +134,7 @@ const Detail = () => {
           </div>
           <section className="job-description">
             <p>
-              Công ty TNHH GMO-Z.com Financial System VN là công ty con của tập
-              đoàn GMO Financial Holdings, Inc., một doanh nghiệp hàng đầu trong
-              lĩnh vực công nghệ, tài chính tại Nhật Bản và là một thành viên
-              trong tập đoàn GMO Group. Công ty đang cần tuyển vị trí như sau:
-              Mobile Developer: cụ thể là Android Developer (Tiếng Nhật N1~N4)
-              Thu nhập tại Việt Nam lên tới 70Tr/tháng, tại Nhật lên tới
-              160Tr/tháng
-              <br />
-              - Phát triển và vận hành các giải pháp về bảo mật thông tin, an
-              ninh mạng.
-              <br />
-              - Xây dựng và triển khai các công cụ, giải pháp tự động hóa để
-              quản trị hệ thống mạng truyền thông.
-              <br />
+            {companyData?.companyProfile}
             </p>
           </section>
         </div>
