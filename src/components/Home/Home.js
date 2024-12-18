@@ -97,7 +97,7 @@ const Home = () => {
 
       {/* Filters */}
       <div className="content-block">
-        <div className="filter-section">
+        {/* <div className="filter-section">
           <div className="filter-box">
             <h3>Bộ lọc theo thành phố</h3>
             <ul>
@@ -138,7 +138,7 @@ const Home = () => {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
 
         {/* Featured Jobs */}
         {/* Featured Jobs */}
