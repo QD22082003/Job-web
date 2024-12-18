@@ -2,7 +2,9 @@ import React from "react";
 import "./Home.css";
 import Logo from "../../asset/image.png";
 import { FaBriefcase, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
-
+import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import logoweb from "../../asset/1.png";
 const jobData = [
   {
     id: 1,
@@ -36,39 +38,55 @@ const jobData = [
     salary: "Thương lượng",
     image: Logo,
   },
+  
+  
 ];
 
 const Home = () => {
+  const handleJobClick = (id) => {
+    navigate(`/detail/${id}`);
+  };
+  const navigate = useNavigate();
   return (
     <div className="home-container">
       {/* Header */}
       <header className="header">
         <div className="header-content">
+        <img src={logoweb} alt="Job" className="logo-image" />
           <label className="label-cum">Cụm 1</label>
           <div className="auth-links">
-            <a href="/signin">Sign in</a> | <a href="/signup">Sign up</a>
+            <a href="/signin">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
           </div>
         </div>
       </header>
 
       {/* Search Section */}
-      <div className="search-section-block">
-        <section className="search-section">
-          <label className="title">Find a Job</label>
-          <div className="search-box">
-            <input type="text" placeholder="Job title or keyword" />
-            <input type="text" placeholder="Set location" />
-            <button className="search-button">Search</button>
-            <button className="search-button">Search Details</button>
-          </div>
-        </section>
-      </div>
+       <div className="search-section-block">
+              <section className="search-section">
+      
+                <label className="title">Hệ thống tìm việc</label>
+                <div className="search-box">
+                <div className="input-with-icon">
+                  <FaSearch size={15} color="#007bff" />
+                  <input type="text" placeholder="Tìm việc theo từ khóa" />
+                </div>
+                
+                {/* Tìm kiếm địa điểm */}
+                <div className="input-with-icon">
+                  <FaMapMarkerAlt size={15} color="#007bff" />
+                  <input type="text" placeholder="Chọn địa chỉ" />
+                </div>
+                  <button className="search-button">Tìm kiếm</button>
+                  <button className="search-button">Tìm kiếm theo thông tin chi tiết</button>
+                </div>
+              </section>
+            </div>
 
       {/* Filters */}
       <div className="content-block">
         <div className="filter-section">
           <div className="filter-box">
-            <h3>Refine by City</h3>
+            <h3>Bộ lọc theo thành phố</h3>
             <ul>
               <li className="checkbox-block">
                 <input type="checkbox" /> Hà Nội (10)
@@ -88,7 +106,7 @@ const Home = () => {
             </ul>
           </div>
           <div className="filter-box">
-            <h3>Refine by Category</h3>
+            <h3>Bộ lọc theo vị trí</h3>
             <ul>
               <li className="checkbox-block">
                 <input type="checkbox" /> Developer (10)
@@ -111,14 +129,14 @@ const Home = () => {
 
         {/* Featured Jobs */}
         <div className="featured-jobs">
-          <h3>Featured Jobs</h3>
+          <h3>Danh sách Job</h3>
           <ul className="job-list">
             {jobData.map((job) => (
-              <li key={job.id}>
+              <li key={job.id} onClick={() => handleJobClick(job.id)}>
                 <img src={job.image} alt={job.title} className="job-image" />
                 <div className="job-info">
                   <p className="job-text">
-                    <FaBriefcase size={16} color="#085587" /> {job.title}
+                    <FaBriefcase size={16} color="currentColor" /> {job.title}
                   </p>
                   <p className="cp-text">
                     <FaBuilding size={12} color="#085587" /> {job.company}
