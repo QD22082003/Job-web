@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Home.css";
-import Logo from "../../asset/image.png";
+import Logo from "../../assets/image.png";
 import { FaBriefcase, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import logoweb from "../../asset/1.png";
+import logoweb from "../../assets/1.png";
 const jobData = [
   {
     jobId: 1,
@@ -46,7 +46,10 @@ const Home = () => {
     debugger
     navigate(`/detail/${companyName}`);
   };
-  
+  const handleSearchDetail= () => {
+    
+    navigate(`/search-detail`);
+  };
   const navigate = useNavigate();
   return (
     <div className="home-container">
@@ -56,7 +59,7 @@ const Home = () => {
           <img src={logoweb} alt="Job" className="logo-image" />
           <label className="label-cum">Cụm 1</label>
           <div className="auth-links">
-            <a href="/signin">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
+            <a href="/login">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
           </div>
         </div>
       </header>
@@ -85,7 +88,7 @@ const Home = () => {
               Tìm kiếm
             </button>
 
-            <button className="search-button">
+            <button className="search-button" onClick={handleSearchDetail}>
               Tìm kiếm theo thông tin chi tiết
             </button>
           </div>

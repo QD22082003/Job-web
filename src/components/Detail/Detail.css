@@ -20,7 +20,7 @@ input:focus {
   }
   .backCompany-image{
     margin-top: 30px;
-    width: 60%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -49,7 +49,7 @@ input:focus {
     margin-top: 10px;
   }
   .job-info-detail {
-    background-image: url('../../asset/backgr.png'); /* Đường dẫn ảnh nền */
+    background-image: url('../../assets/backgr.png'); /* Đường dẫn ảnh nền */
     background-size: cover; /* Đảm bảo ảnh phủ hết phần tử */
     background-position: center; /* Căn giữa ảnh */
     padding: 20px; /* Padding để nội dung không bị che khuất */
@@ -168,4 +168,66 @@ input:focus {
   .job-descriptio{
     padding: 10px;
   }
+
+  .job-description {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .job-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .job-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .job-title {
+    color: #007bff;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+  }
+  
+  .job-details p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .job-description-content,
+  .job-requirement-content {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .salary-highlight {
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .job-actions {
+    margin-top: 10px;
+    text-align: right;
+  }
+  
+  .job-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  .job-link:hover {
+    color: #0056b3;
+  }
+  
   

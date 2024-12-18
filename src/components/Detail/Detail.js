@@ -8,10 +8,10 @@ import {
   FaIndustry,
   FaUsers,
   FaGlobe,
-  FaEye 
+  FaEye,
 } from "react-icons/fa";
-import Logo from "../../asset/image.png";
-import logoweb from "../../asset/1.png";
+import Logo from "../../assets/logo-tlu.png";
+import logoweb from "../../assets/1.png";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 const Detail = () => {
@@ -22,7 +22,6 @@ const Detail = () => {
     navigate(`/`);
   };
   const fetchCompanyData = async () => {
-    debugger;
     try {
       const response = await axios.post(
         "http://localhost:3000/api/company/search",
@@ -60,13 +59,13 @@ const Detail = () => {
           <img src={logoweb} alt="Job" className="logo-image" />
           <label className="label-cum">Cụm 1</label>
           <div className="auth-links">
-            <a href="/signin">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
+            <a href="/login">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
           </div>
         </div>
       </header>
 
       {/* Search Section */}
-      <div className="search-section-block">
+      {/* <div className="search-section-block">
         <section className="search-section">
           <label className="title">Hệ thống tìm việc</label>
           <div className="search-box">
@@ -74,19 +73,13 @@ const Detail = () => {
               <FaSearch size={15} color="#007bff" />
               <input type="text" placeholder="Tìm việc theo từ khóa" />
             </div>
-
-            {/* Tìm kiếm địa điểm */}
-            {/* <div className="input-with-icon">
-              <FaMapMarkerAlt size={15} color="#007bff" />
-              <input type="text" placeholder="Chọn địa chỉ" />
-            </div> */}
             <button className="search-button">Tìm kiếm</button>
             <button className="search-button">
               Tìm kiếm theo thông tin chi tiết
             </button>
           </div>
         </section>
-      </div>
+      </div> */}
       <img
         src={companyData?.bannerDesktopUri}
         alt="Job"
@@ -114,7 +107,8 @@ const Detail = () => {
               {companyData?.address}
             </p>
             <p className="salary">
-              <FaEye size={12} color="#085587" /> {companyData?.followerCount} Lượt quan tâm
+              <FaEye size={12} color="#085587" /> {companyData?.followerCount}{" "}
+              Lượt quan tâm
             </p>
           </div>
         </div>
@@ -133,58 +127,65 @@ const Detail = () => {
             <h3>Mô tả công việc</h3>
           </div>
           <section className="job-description">
-            <p>
-            {companyData?.companyProfile}
-            </p>
+            {companyData?.jobs.map((job) => (
+              <div key={job.jobId} className="job-card">
+                <h3 className="job-title">{job.jobTitle}</h3>
+                <div className="job-details">
+                  <p>
+                    <strong>Công ty: </strong>
+                    {job.companyName}
+                  </p>
+                  <p>
+                    <strong>Địa chỉ: </strong>
+                    {job.address}
+                  </p>
+                  <p>
+                    <strong>Mô tả công việc: </strong>
+                  </p>
+                  <div
+                    className="job-description-content"
+                    dangerouslySetInnerHTML={{ __html: job.jobDescription }}
+                  ></div>
+                  <p>
+                    <strong>Yêu cầu công việc: </strong>
+                  </p>
+                  <div
+                    className="job-requirement-content"
+                    dangerouslySetInnerHTML={{ __html: job.jobRequirement }}
+                  ></div>
+                  <p>
+                    <strong>Mức lương: </strong>
+                    <span className="salary-highlight">{job.prettySalary}</span>
+                  </p>
+                  <div className="job-actions">
+                    <a
+                      href={job.jobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="job-link"
+                    >
+                      Xem chi tiết công việc
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
           </section>
         </div>
         <div className="content-block-job-detail-right">
           <div className="blockBlue">
-            <h3>Mô tả công việc</h3>
+            <h3>Giới thiệu công ty</h3>
           </div>
           <aside className="sidebar">
-            <div className="company-info">
-              <h4>Thông tin công ty</h4>
-              <ul>
-                <li className="company-info-detail">
-                  <FaIndustry size={15} color="#007bff" />
-                  <span style={{ color: "#007bff", fontWeight: "600" }}>
-                    Lĩnh vực:
-                  </span>{" "}
-                  Công nghệ thông tin
-                </li>
-                <li className="company-info-detail">
-                  <FaMapMarkerAlt size={15} color="#007bff" />
-                  <span style={{ color: "#007bff", fontWeight: "600" }}>
-                    Địa điểm:
-                  </span>{" "}
-                  Hà Nội
-                </li>
-                <li className="company-info-detail">
-                  <FaUsers size={15} color="#007bff" />
-                  <span style={{ color: "#007bff", fontWeight: "600" }}>
-                    Nhân viên:
-                  </span>{" "}
-                  Hơn 1000
-                </li>
-                <li className="company-info-detail">
-                  <FaGlobe size={15} color="#007bff" />
-                  <span style={{ color: "#007bff", fontWeight: "600" }}>
-                    Website:
-                  </span>{" "}
-                  <a href="#">bidv.com.vn</a>
-                </li>
-              </ul>
-            </div>
-            <div className="general-info">
-              <h4>Thông tin chung</h4>
-              <p>
-                <strong>Hạn nộp hồ sơ:</strong> 01/09/2024
-              </p>
-              <p>
-                <strong>Ngành nghề:</strong> IT
-              </p>
-            </div>
+            <p
+              style={{
+                fontWeight: "500",
+                lineHeight: "1.8", // Tăng khoảng cách giữa các dòng
+                fontStyle: "italic", // Chữ in nghiêng
+              }}
+            >
+              {companyData?.companyProfile}
+            </p>
           </aside>
         </div>
         {/* Company Info */}
