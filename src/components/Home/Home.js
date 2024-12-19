@@ -1,103 +1,81 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Home.css";
-import Logo from "../../assets/image.png";
+import Header from "../../components/Header/Header";
 import { FaBriefcase, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import logoweb from "../../assets/1.png";
-const jobData = [
-  {
-    jobId: 1,
-    jobTitle: "Chuyên viên đảm bảo chất lượng (QA)",
-    companyName: "BIDV - Trung tâm Phát triển phần mềm",
-    address: "Hà Nội",
-    salary: "Thương lượng",
-    companyLogo: Logo,
-  },
-];
+
 
 const Home = () => {
-  const [keyword, setKeyword] = useState(""); // Lưu từ khóa tìm kiếm
-  const [jobData, setJobData] = useState([]); // Lưu dữ liệu công việc
-  const [loading, setLoading] = useState(false); // Quản lý trạng thái tải
+    const [keyword, setKeyword] = useState("");
+    const [jobData, setJobData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-  // Hàm xử lý sự kiện khi bấm vào nút tìm kiếm
-  const handleSearch = async () => {
-    if (!keyword) return; // Kiểm tra nếu không có từ khóa thì không gọi API
+    // Hàm xử lý sự kiện khi bấm vào nút tìm kiếm
+    const handleSearch = async () => {
+        if (!keyword) return;
 
-    setLoading(true); // Đặt trạng thái loading
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/jobs/search",
-        {
-          keyword: keyword, // Gửi từ khóa vào body
+        setLoading(true);
+        try {
+            const response = await axios.post("http://localhost:3000/api/jobs/search", {
+                keyword: keyword,
+            });
+
+            setJobData(response.data.data);
+        } catch (error) {
+            console.error("Error fetching job data: ", error);
+        } finally {
+            setLoading(false);
         }
-      );
+    };
+    const handleJobClick = (companyName) => {
+        debugger;
+        navigate(`/detail/${companyName}`);
+    };
+    const handleSearchDetail = () => {
+        navigate(`/search-detail`);
+    };
+    const navigate = useNavigate();
+    return (
+        <div className="home-container">
+            {/* Header */}
+            <Header />
 
-      setJobData(response.data.data); // Lưu dữ liệu công việc vào state
-    } catch (error) {
-      console.error("Error fetching job data: ", error);
-    } finally {
-      setLoading(false); // Kết thúc trạng thái loading
-    }
-  };
-  const handleJobClick = (companyName) => {
-    debugger
-    navigate(`/detail/${companyName}`);
-  };
-  const handleSearchDetail= () => {
-    
-    navigate(`/search-detail`);
-  };
-  const navigate = useNavigate();
-  return (
-    <div className="home-container">
-      {/* Header */}
-      <header className="header">
-        <div className="header-content">
-          <img src={logoweb} alt="Job" className="logo-image" />
-          <label className="label-cum">Cụm 1</label>
-          <div className="auth-links">
-            <a href="/login">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
-          </div>
-        </div>
-      </header>
+            {/* Search Section */}
+            <div className="search-section-block">
+                <section className="search-section">
+                    <label className="title">Hệ thống tìm việc</label>
+                    <div className="search-box">
+                        <div className="input-with-icon">
+                            <FaSearch size={15} color="#007bff" />
+                            <input
+                                type="text"
+                                placeholder="Tìm việc theo từ khóa"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                            />
+                        </div>
 
-      {/* Search Section */}
-      <div className="search-section-block">
-        <section className="search-section">
-          <label className="title">Hệ thống tìm việc</label>
-          <div className="search-box">
-            <div className="input-with-icon">
-              <FaSearch size={15} color="#007bff" />
-              <input
-                type="text"
-                placeholder="Tìm việc theo từ khóa"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)} // Cập nhật giá trị từ khóa khi người dùng nhập
-              />
-            </div>
-
-            {/* Tìm kiếm địa điểm */}
-            {/* <div className="input-with-icon">
+                        {/* Tìm kiếm địa điểm */}
+                        {/* <div className="input-with-icon">
               <FaMapMarkerAlt size={15} color="#007bff" />
               <input type="text" placeholder="Chọn địa chỉ" />
             </div> */}
-            <button className="search-button" onClick={handleSearch}>
-              Tìm kiếm
-            </button>
+                        <button className="search-button" onClick={handleSearch}>
+                            Tìm kiếm
+                        </button>
 
-            <button className="search-button" onClick={handleSearchDetail}>
-              Tìm kiếm theo thông tin chi tiết
-            </button>
-          </div>
-        </section>
-      </div>
+                        <button className="search-button" onClick={handleSearchDetail}>
+                            Tìm kiếm theo thông tin chi tiết
+                        </button>
+                    </div>
+                </section>
+            </div>
 
-      {/* Filters */}
-      <div className="content-block">
-        {/* <div className="filter-section">
+            {/* Filters */}
+            <div className="content-block">
+                {/* <div className="filter-section">
           <div className="filter-box">
             <h3>Bộ lọc theo thành phố</h3>
             <ul>
@@ -140,43 +118,37 @@ const Home = () => {
           </div>
         </div> */}
 
-        {/* Featured Jobs */}
-        {/* Featured Jobs */}
-        <div className="featured-jobs">
-          <h3>Danh sách Job</h3>
-          {/* Hiển thị Đang tìm kiếm... khi loading */}
-          {loading ? (
-            <div className="loading-text">Đang tìm kiếm...</div>
-          ) : (
-            <ul className="job-list">
-              {jobData.map((job) => (
-                <li key={job.companyName} onClick={() => handleJobClick(job.companyName)}>
-                  <img
-                    src={job.companyLogo}
-                    alt={job.jobTitle}
-                    className="job-image"
-                  />
-                  <div className="job-info">
-                    <p className="job-text">
-                      <FaBriefcase size={16} color="currentColor" />{" "}
-                      {job.jobTitle}
-                    </p>
-                    <p className="cp-text">
-                      <FaBuilding size={12} color="#085587" /> {job.companyName}
-                    </p>
-                    <p className="ad-text">
-                      <FaMapMarkerAlt size={10} color="#085587" /> {job.address}
-                    </p>
-                  </div>
-                  <button className="salary-button">{job.prettySalary}</button>
-                </li>
-              ))}
-            </ul>
-          )}
+                {/* Featured Jobs */}
+                <div className="featured-jobs">
+                    <h3>Danh sách Job</h3>
+                    {/* Hiển thị Đang tìm kiếm... khi loading */}
+                    {loading ? (
+                        <div className="loading-text">Đang tìm kiếm...</div>
+                    ) : (
+                        <ul className="job-list">
+                            {jobData.map((job) => (
+                                <li key={job.companyName} onClick={() => handleJobClick(job.companyName)}>
+                                    <img src={job.companyLogo} alt={job.jobTitle} className="job-image" />
+                                    <div className="job-info">
+                                        <p className="job-text">
+                                            <FaBriefcase size={16} color="currentColor" /> {job.jobTitle}
+                                        </p>
+                                        <p className="cp-text">
+                                            <FaBuilding size={12} color="#085587" /> {job.companyName}
+                                        </p>
+                                        <p className="ad-text">
+                                            <FaMapMarkerAlt size={10} color="#085587" /> {job.address}
+                                        </p>
+                                    </div>
+                                    <button className="salary-button">{job.prettySalary}</button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Home;

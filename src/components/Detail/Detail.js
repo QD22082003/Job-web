@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./Detail.css";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaBriefcase, FaDollarSign } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import {
-  FaSearch,
   FaMapMarkerAlt,
-  FaIndustry,
-  FaUsers,
-  FaGlobe,
   FaEye,
 } from "react-icons/fa";
-import Logo from "../../assets/logo-tlu.png";
-import logoweb from "../../assets/1.png";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import Header from "../../components/Header/Header";
+import "./Detail.css";
+
 const Detail = () => {
   const { companyName } = useParams();
   const [companyData, setCompanyData] = useState(null);
@@ -54,15 +49,8 @@ const Detail = () => {
   return (
     <div className="detail-container">
       {/* Header */}
-      <header className="header">
-        <div className="header-content">
-          <img src={logoweb} alt="Job" className="logo-image" />
-          <label className="label-cum">Cụm 1</label>
-          <div className="auth-links">
-            <a href="/login">Đăng nhập</a> | <a href="/signup">Đăng kí</a>
-          </div>
-        </div>
-      </header>
+      <Header />
+
 
       {/* Search Section */}
       {/* <div className="search-section-block">
@@ -180,8 +168,8 @@ const Detail = () => {
             <p
               style={{
                 fontWeight: "500",
-                lineHeight: "1.8", // Tăng khoảng cách giữa các dòng
-                fontStyle: "italic", // Chữ in nghiêng
+                lineHeight: "1.8", 
+                fontStyle: "italic", 
               }}
             >
               {companyData?.companyProfile}

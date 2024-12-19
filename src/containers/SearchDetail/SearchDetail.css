@@ -2,15 +2,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; 
+    justify-content: flex-start;
     padding: 20px;
     background: #f0f4f8;
-    min-height: 100vh; 
+    min-height: 100vh;
     overflow-y: auto;
 }
 
+.search-detail-container > .Header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+
 .search-detail-form {
-    margin-top: 20px;
+    margin-top: 80px;
     background: linear-gradient(145deg, #fff, #d4d4d4);
     box-shadow: 8px 8px 15px #c3c3c3, -8px -8px 15px #fff;
     border-radius: 20px;
@@ -68,6 +76,7 @@
 }
 
 .submit-button {
+    margin-top: 40px;
     padding: 10px;
     font-weight: bold;
     color: #fff;

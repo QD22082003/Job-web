@@ -1,12 +1,14 @@
 .header {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
   display: flex;
   justify-content: space-between;
   padding: 10px 10px;
   background-color: #fff;
-
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+  z-index: 1000; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 .home-link {
