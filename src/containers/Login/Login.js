@@ -14,50 +14,39 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    // Hàm xử lý đăng nhập
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(""); // Xóa lỗi trước đó
+        setLoading(true); // Hiển thị loading
 
-        if (!studentId || !password) {
-            setError("Vui lòng nhập đầy đủ thông tin.");
-            return;
-        }
-
-        setLoading(true);
+        const loginData = {
+            client_id: "education_client",
+            grant_type: "password",
+            username: studentId,
+            password: password,
+            client_secret: "password"
+        };
 
         try {
-            const response = await axios.post("http://127.0.0.1:5000/login", {
-                username: studentId,
-                password: password,
-            });
+            const response = await axios.post("http://localhost:3000/api/login", loginData);
+            // Xử lý thành công
+            toast.success("Đăng nhập thành công!");
+            console.log("Response:", response.data);
 
-            const result = response.data;
+            // Lưu token vào localStorage hoặc sessionStorage nếu cần
+            localStorage.setItem("accessToken", response.data.token);
 
-            if (response.status === 200 && result.status === "success") {
-                localStorage.setItem("access_token", result.data.access_token);
-                console.log("token:", result.data.access_token);
-                toast.success("Đăng nhập thành công!");
-                navigate("/Leaderboard");
-                setError("");
-            } else {
-                setError("Tài khoản hoặc mật khẩu không đúng.");
-            }
-        } catch (error) {
-            console.error("Error during login:", error);
-
-            if (error.response) {
-                if (error.response.data.message === "Invalid username or password") {
-                    setError("Tài khoản hoặc mật khẩu không đúng.");
-                } else {
-                    setError(error.response.data.message || "Đăng nhập thất bại.");
-                }
-            } else {
-                setError("Không thể kết nối tới server.");
-            }
+            // Chuyển hướng sang trang dashboard hoặc trang chính
+            navigate("/");
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("Tên đăng nhập hoặc mật khẩu không chính xác!");
+            toast.error("Đăng nhập thất bại. Vui lòng thử lại!");
         } finally {
-            setLoading(false);
+            setLoading(false); // Tắt loading
         }
     };
-
 
     return (
         <div className="login-container">
@@ -66,7 +55,7 @@ const Login = () => {
                 <label className="leader-board">Hệ thống tìm việc</label>
             </div>
 
-            <form className="form-main-login" >
+            <form className="form-main-login" onSubmit={handleSubmit}>
                 <p className="form-title">Đăng nhập</p>
 
                 {error && <p className="error-message">{error}</p>}
