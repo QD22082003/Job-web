@@ -341,9 +341,9 @@ const SearchDetail = () => {
                                     onChange={(e) => setFieldValue("python", e.target.value)}
                                     label="Python"
                                 >
-                                    <MenuItem value={1}>1</MenuItem>
-                                    <MenuItem value={2}>2</MenuItem>
-                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={1}>Giỏi</MenuItem>
+                                    <MenuItem value={2}>Khá</MenuItem>
+                                    <MenuItem value={3}>Trung bình</MenuItem>
                                 </Select>
                                 {touched.python && errors.python && <div className="error-text">{errors.python}</div>}
                             </FormControl>
@@ -359,9 +359,9 @@ const SearchDetail = () => {
                                     onChange={(e) => setFieldValue("sql", e.target.value)}
                                     label="SQL"
                                 >
-                                    <MenuItem value={1}>1</MenuItem>
-                                    <MenuItem value={2}>2</MenuItem>
-                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={1}>Giỏi</MenuItem>
+                                    <MenuItem value={2}>Khá</MenuItem>
+                                    <MenuItem value={3}>Trung bình</MenuItem>
                                 </Select>
                                 {touched.sql && errors.sql && <div className="error-text">{errors.sql}</div>}
                             </FormControl>
@@ -377,9 +377,9 @@ const SearchDetail = () => {
                                     onChange={(e) => setFieldValue("java", e.target.value)}
                                     label="Java"
                                 >
-                                    <MenuItem value={1}>1</MenuItem>
-                                    <MenuItem value={2}>2</MenuItem>
-                                    <MenuItem value={3}>3</MenuItem>
+                                      <MenuItem value={1}>Giỏi</MenuItem>
+                                    <MenuItem value={2}>Khá</MenuItem>
+                                    <MenuItem value={3}>Trung bình</MenuItem>
                                 </Select>
                                 {touched.java && errors.java && <div className="error-text">{errors.java}</div>}
                             </FormControl>

@@ -38,6 +38,7 @@ const Login = () => {
             localStorage.setItem("accessToken", response.data.token);
 
             // Chuyển hướng sang trang dashboard hoặc trang chính
+            setLoading(false);
             navigate("/");
         } catch (err) {
             console.error("Login error:", err);
