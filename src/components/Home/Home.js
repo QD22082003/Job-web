@@ -51,18 +51,20 @@ const Home = () => {
             <div className="input-with-icon">
               <FaSearch size={15} color="#007bff" />
               <input
+              style={{backgroundColor:'#fff'}}
                 type="text"
                 placeholder="Tìm việc theo từ khóa"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Ngăn reload trang nếu dùng trong form
+                    handleSearch(); // Gọi hàm tìm kiếm
+                  }
+                }}
               />
             </div>
 
-            {/* Tìm kiếm địa điểm */}
-            {/* <div className="input-with-icon">
-              <FaMapMarkerAlt size={15} color="#007bff" />
-              <input type="text" placeholder="Chọn địa chỉ" />
-            </div> */}
             <button className="search-button" onClick={handleSearch}>
               Tìm kiếm
             </button>

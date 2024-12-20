@@ -30,6 +30,7 @@ const Detail = () => {
       } else {
         console.error("Không tìm thấy công ty.");
       }
+      debugger
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     } finally {

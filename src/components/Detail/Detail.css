@@ -2,6 +2,9 @@
 input:focus {
   outline: none; /* Tắt viền mặc định */
 }
+.loading-container{
+  margin-top: 30px;
+}
 .detail-container {
     font-family: Arial, sans-serif;
     color: #333;
