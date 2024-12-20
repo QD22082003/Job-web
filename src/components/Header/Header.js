@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logoweb from "../../assets/1.png";
 import "./Header.css";
 
 const Header = () => {
-    // Kiểm tra token trong localStorage
-    const token = localStorage.getItem("accessToken");
-    const userName = "Bùi Quang Đạo"; // Giả định tên người dùng, có thể lấy từ token khi giải mã
+    const token = localStorage.getItem("accessToken"); // Lấy token từ localStorage
+    const [userData, setUserData] = useState({ name: "", uid: "" }); // State lưu thông tin người dùng
+
+    // Gọi API khi có token
+    useEffect(() => {
+        if (token) {
+            debugger
+            fetch("http://localhost:3000/api/student/getSummaryMark", {
+                method: "GET",
+                headers: {
+                    Authorization: `${token}`, // Truyền token vào header Authorization
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => response.json()) // Parse JSON từ response
+                .then((data) => {
+                    if (data.message === "Get student info success") {
+                        // Lưu tên và mã sinh viên vào state
+                        setUserData({
+                            name: data.data.displayName,
+                            uid: data.data.uid,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching student data:", error);
+                });
+        }
+    }, [token]); // useEffect sẽ chạy khi token thay đổi
 
     return (
         <header className="header">
@@ -17,9 +43,11 @@ const Header = () => {
                 </Link>
                 <div className="auth-links">
                     {token ? (
-                        <span className="user-name">{userName}</span> // Hiển thị tên người dùng
-                    ) : ( 
-                        <a href="/login">Đăng nhập</a> // Hiển thị Đăng nhập khi không có token
+                        <span className="user-name">
+                            {userData.name} - {userData.uid}
+                        </span>
+                    ) : (
+                        <a href="/login">Đăng nhập</a>
                     )}
                 </div>
             </div>
