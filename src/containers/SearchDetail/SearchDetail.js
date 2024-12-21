@@ -32,7 +32,7 @@ const SearchDetail = () => {
   const token = localStorage.getItem("accessToken");
   useEffect(() => {
     if (token) {
-      debugger;
+      setLoading(true);
       fetch("http://localhost:3000/api/student/getSummaryMark", {
         method: "GET",
         headers: {
@@ -48,6 +48,7 @@ const SearchDetail = () => {
               name: data.data.displayName,
               uid: data.data.uid,
             });
+            setLoading(false);
           }
         })
         .catch((error) => {
@@ -55,6 +56,13 @@ const SearchDetail = () => {
         });
     }
   }, [token]);
+
+  const handleJobHome = () => {
+    // Chuyển hướng đến trang Home và truyền giá trị search trong state
+    navigate("/?search=" + futureCareer, { state: { futureCareer } });
+    console.log("futureCareer", futureCareer);
+  };
+  
   const projects = [
     "Chatbot Development",
     "Data Analytics",
@@ -167,17 +175,13 @@ const SearchDetail = () => {
   };
 
   const validationSchema = Yup.object({
-    student_id: Yup.string().required("Trường này không được để trống"),
-    name: Yup.string()
-      .required("This field cannot be empty")
-      .min(2, "Tên phải có ít nhất 2 ký tự")
-      .max(50, "Tên không được vượt quá 50 ký tự")
-      .trim(),
     gender: Yup.string().required("Trường này không được để trống"),
     age: Yup.number()
-      .required("Trường này không được để trống")
-      .positive()
-      .integer(),
+    .required("Trường này không được để trống")
+    .positive("Tuổi phải là số dương")  // Đảm bảo tuổi là số dương
+    .integer("Tuổi phải là số nguyên")  // Đảm bảo tuổi là số nguyên
+    .min(18, "Tuổi phải ít nhất là 18")  // Thiết lập độ tuổi tối thiểu
+    .max(100, "Tuổi không được lớn hơn 100") ,
     gpa: Yup.number()
       .required("Trường này không được để trống")
       .min(1)
@@ -245,241 +249,253 @@ const SearchDetail = () => {
             </button>
 
             <h2>Dự đoán Nghề Nghiệp</h2>
-
-            {/* Student ID */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.student_id && !!errors.student_id}
-              >
-                <Field
-                  name="student_id"
-                  as={TextField} // Luôn render TextField
-                  variant="outlined"
-                  fullWidth
-                  label="Mã sinh viên"
-                  value={userData?.uid || ""} // Gán giá trị từ userData.uid nếu tồn tại
-                  error={touched.student_id && !!errors.student_id}
-                  helperText={touched.student_id && errors.student_id}
-                />
-              </FormControl>
-            </div>
-
-            {/* Name */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.name && !!errors.name}
-              >
-                <Field
-                  name="name"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="Tên"
-                  value={userData?.name || ""}
-                  error={touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
-                />
-              </FormControl>
-            </div>
-
-            {/* Gender */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.gender && !!errors.gender}
-              >
-                <InputLabel>Lựa chọn giới tính</InputLabel>
-                <Select
-                  name="gender"
-                  value={values.gender}
-                  onChange={(e) => setFieldValue("gender", e.target.value)}
-                  label="Lựa chọn giới tính"
-                >
-                  <MenuItem value="Male">Nam</MenuItem>
-                  <MenuItem value="Female">Nữ</MenuItem>
-                </Select>
-                {touched.gender && errors.gender && (
-                  <div className="error-text">{errors.gender}</div>
-                )}
-              </FormControl>
-            </div>
-
-            {/* Age */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.age && !!errors.age}
-              >
-                <Field
-                  name="age"
-                  type="number"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="Tuổi"
-                  error={touched.age && !!errors.age}
-                  helperText={touched.age && errors.age}
-                />
-              </FormControl>
-            </div>
-
-            {/* GPA */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.gpa && !!errors.gpa}
-              >
-                <Field
-                  name="gpa"
-                  type="number"
-                  as={TextField}
-                  variant="outlined"
-                  fullWidth
-                  label="GPA"
-                  error={touched.gpa && !!errors.gpa}
-                  helperText={touched.gpa && errors.gpa}
-                />
-              </FormControl>
-            </div>
-
-            {/* Lĩnh vực Quan tâm */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.interested_domain && !!errors.interested_domain}
-              >
-                <Autocomplete
-                  options={domains}
-                  value={values.interested_domain}
-                  onChange={(event, newValue) =>
-                    setFieldValue("interested_domain", newValue || "")
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Chọn Lĩnh vực"
+            {loading ? ( // Kiểm tra trạng thái loading
+              <div className="loading-container-info">
+                <div className="loading-spinner"></div>
+              </div>
+            ) : (
+              <>
+                {/* Student ID */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.student_id && !!errors.student_id}
+                  >
+                    <Field
+                      name="student_id"
+                      as={TextField} // Luôn render TextField
                       variant="outlined"
-                      error={
-                        touched.interested_domain && !!errors.interested_domain
-                      }
-                      helperText={
-                        touched.interested_domain && errors.interested_domain
-                      }
+                      fullWidth
+                      label="Mã sinh viên"
+                      value={userData?.uid || ""} // Gán giá trị từ userData.uid nếu tồn tại
+                      error={touched.student_id && !!errors.student_id}
+                      helperText={touched.student_id && errors.student_id}
                     />
-                  )}
-                />
-              </FormControl>
-            </div>
+                  </FormControl>
+                </div>
 
-            {/* Dự án */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.projects && !!errors.projects}
-              >
-                <Autocomplete
-                  options={projects}
-                  value={values.projects}
-                  onChange={(event, newValue) =>
-                    setFieldValue("projects", newValue || "")
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Chọn Dự án"
+                {/* Name */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.name && !!errors.name}
+                  >
+                    <Field
+                      name="name"
+                      as={TextField}
                       variant="outlined"
-                      error={touched.projects && !!errors.projects}
-                      helperText={touched.projects && errors.projects}
+                      fullWidth
+                      label="Tên"
+                      value={userData?.name || ""}
+                      error={touched.name && !!errors.name}
+                      helperText={touched.name && errors.name}
                     />
-                  )}
-                />
-              </FormControl>
-            </div>
+                  </FormControl>
+                </div>
 
-            {/* Python */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.python && !!errors.python}
-              >
-                <InputLabel>Python</InputLabel>
-                <Select
-                  name="python"
-                  value={values.python}
-                  onChange={(e) => setFieldValue("python", e.target.value)}
-                  label="Python"
-                >
-                  <MenuItem value={1}>Giỏi</MenuItem>
-                  <MenuItem value={2}>Khá</MenuItem>
-                  <MenuItem value={3}>Trung bình</MenuItem>
-                </Select>
-                {touched.python && errors.python && (
-                  <div className="error-text">{errors.python}</div>
-                )}
-              </FormControl>
-            </div>
+                {/* Gender */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.gender && !!errors.gender}
+                  >
+                    <InputLabel>Lựa chọn giới tính</InputLabel>
+                    <Select
+                      name="gender"
+                      value={values.gender}
+                      onChange={(e) => setFieldValue("gender", e.target.value)}
+                      label="Lựa chọn giới tính"
+                    >
+                      <MenuItem value="Male">Nam</MenuItem>
+                      <MenuItem value="Female">Nữ</MenuItem>
+                    </Select>
+                    {touched.gender && errors.gender && (
+                      <div className="error-text">{errors.gender}</div>
+                    )}
+                  </FormControl>
+                </div>
 
-            {/* SQL */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.sql && !!errors.sql}
-              >
-                <InputLabel>SQL</InputLabel>
-                <Select
-                  name="sql"
-                  value={values.sql}
-                  onChange={(e) => setFieldValue("sql", e.target.value)}
-                  label="SQL"
-                >
-                  <MenuItem value={1}>Giỏi</MenuItem>
-                  <MenuItem value={2}>Khá</MenuItem>
-                  <MenuItem value={3}>Trung bình</MenuItem>
-                </Select>
-                {touched.sql && errors.sql && (
-                  <div className="error-text">{errors.sql}</div>
-                )}
-              </FormControl>
-            </div>
+                {/* Age */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.age && !!errors.age}
+                  >
+                    <Field
+                      name="age"
+                      type="number"
+                      as={TextField}
+                      variant="outlined"
+                      fullWidth
+                      label="Tuổi"
+                      error={touched.age && !!errors.age}
+                      helperText={touched.age && errors.age}
+                    />
+                  </FormControl>
+                </div>
 
-            {/* Java */}
-            <div className="form-group">
-              <FormControl
-                fullWidth
-                variant="outlined"
-                error={touched.java && !!errors.java}
-              >
-                <InputLabel>Java</InputLabel>
-                <Select
-                  name="java"
-                  value={values.java}
-                  onChange={(e) => setFieldValue("java", e.target.value)}
-                  label="Java"
-                >
-                  <MenuItem value={1}>Giỏi</MenuItem>
-                  <MenuItem value={2}>Khá</MenuItem>
-                  <MenuItem value={3}>Trung bình</MenuItem>
-                </Select>
-                {touched.java && errors.java && (
-                  <div className="error-text">{errors.java}</div>
-                )}
-              </FormControl>
-            </div>
+                {/* GPA */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.gpa && !!errors.gpa}
+                  >
+                    <Field
+                      name="gpa"
+                      type="number"
+                      as={TextField}
+                      variant="outlined"
+                      fullWidth
+                      label="GPA"
+                      value={'3.2'}
+                      error={touched.gpa && !!errors.gpa}
+                      helperText={touched.gpa && errors.gpa}
+                    />
+                  </FormControl>
+                </div>
 
-            <button type="submit" className="submit-button">
-              Dự đoán
-            </button>
+                {/* Lĩnh vực Quan tâm */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={
+                      touched.interested_domain && !!errors.interested_domain
+                    }
+                  >
+                    <Autocomplete
+                      options={domains}
+                      value={values.interested_domain}
+                      onChange={(event, newValue) =>
+                        setFieldValue("interested_domain", newValue || "")
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Chọn Lĩnh vực"
+                          variant="outlined"
+                          error={
+                            touched.interested_domain &&
+                            !!errors.interested_domain
+                          }
+                          helperText={
+                            touched.interested_domain &&
+                            errors.interested_domain
+                          }
+                        />
+                      )}
+                    />
+                  </FormControl>
+                </div>
+
+                {/* Dự án */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.projects && !!errors.projects}
+                  >
+                    <Autocomplete
+                      options={projects}
+                      value={values.projects}
+                      onChange={(event, newValue) =>
+                        setFieldValue("projects", newValue || "")
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Chọn Dự án"
+                          variant="outlined"
+                          error={touched.projects && !!errors.projects}
+                          helperText={touched.projects && errors.projects}
+                        />
+                      )}
+                    />
+                  </FormControl>
+                </div>
+
+                {/* Python */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.python && !!errors.python}
+                  >
+                    <InputLabel>Python</InputLabel>
+                    <Select
+                      name="python"
+                      value={values.python}
+                      onChange={(e) => setFieldValue("python", e.target.value)}
+                      label="Python"
+                    >
+                      <MenuItem value={1}>Giỏi</MenuItem>
+                      <MenuItem value={2}>Khá</MenuItem>
+                      <MenuItem value={3}>Trung bình</MenuItem>
+                    </Select>
+                    {touched.python && errors.python && (
+                      <div className="error-text">{errors.python}</div>
+                    )}
+                  </FormControl>
+                </div>
+
+                {/* SQL */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.sql && !!errors.sql}
+                  >
+                    <InputLabel>SQL</InputLabel>
+                    <Select
+                      name="sql"
+                      value={values.sql}
+                      onChange={(e) => setFieldValue("sql", e.target.value)}
+                      label="SQL"
+                    >
+                      <MenuItem value={1}>Giỏi</MenuItem>
+                      <MenuItem value={2}>Khá</MenuItem>
+                      <MenuItem value={3}>Trung bình</MenuItem>
+                    </Select>
+                    {touched.sql && errors.sql && (
+                      <div className="error-text">{errors.sql}</div>
+                    )}
+                  </FormControl>
+                </div>
+
+                {/* Java */}
+                <div className="form-group">
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    error={touched.java && !!errors.java}
+                  >
+                    <InputLabel>Java</InputLabel>
+                    <Select
+                      name="java"
+                      value={values.java}
+                      onChange={(e) => setFieldValue("java", e.target.value)}
+                      label="Java"
+                    >
+                      <MenuItem value={1}>Giỏi</MenuItem>
+                      <MenuItem value={2}>Khá</MenuItem>
+                      <MenuItem value={3}>Trung bình</MenuItem>
+                    </Select>
+                    {touched.java && errors.java && (
+                      <div className="error-text">{errors.java}</div>
+                    )}
+                  </FormControl>
+                </div>
+
+                <button type="submit" className="submit-button">
+                  Dự đoán
+                </button>
+              </>
+            )}
           </Form>
         )}
       </Formik>
@@ -498,7 +514,7 @@ const SearchDetail = () => {
               <span>Đang tải...</span>
             </div>
           ) : (
-            <div className="result">
+            <div className="result" onClick={handleJobHome}>
               <h3>Việc làm dự kiến:</h3>
               <p className="future-career">{futureCareer}</p>
             </div>

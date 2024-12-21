@@ -6,9 +6,11 @@ import "./Header.css";
 const Header = () => {
   const token = localStorage.getItem("accessToken"); // Lấy token từ localStorage
   const [userData, setUserData] = useState({ name: "", uid: "" }); // State lưu thông tin người dùng
+  const [loading, setLoading] = useState(false); // Thêm state loading
 
   useEffect(() => {
     if (token) {
+      setLoading(true); // Bắt đầu trạng thái loading
       fetch("http://localhost:3000/api/student/getSummaryMark", {
         method: "GET",
         headers: {
@@ -28,13 +30,18 @@ const Header = () => {
         })
         .catch((error) => {
           console.error("Error fetching student data:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Kết thúc trạng thái loading
         });
     }
   }, [token]);
+
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     window.location.reload();
   };
+
   return (
     <header className="header">
       <div className="header-content">
@@ -43,7 +50,11 @@ const Header = () => {
           <label className="label-cum">Cụm 1</label>
         </Link>
         <div className="auth-links">
-          {token ? (
+          {loading ? ( // Kiểm tra trạng thái loading
+            <div className="loading-container-info">
+              <div className="loading-spinner"></div>
+            </div>
+          ) : token ? (
             <>
               <span className="user-name">
                 {userData.name} - {userData.uid}
@@ -65,7 +76,7 @@ const Header = () => {
                 onMouseOver={(e) =>
                   (e.target.style.backgroundColor = "#d9363e")
                 }
-                onMouseOut={(e) => (e.target.style.backgroundColor = "#ff4d4f")}
+                onMouseOut={(e) => (e.target.style.backgroundColor = "#085587")}
               >
                 Đăng xuất
               </button>

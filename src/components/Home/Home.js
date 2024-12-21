@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Home.css";
 import Header from "../../components/Header/Header";
 import { FaBriefcase, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
+import { useNavigate, useLocation } from "react-router-dom";
 const Home = () => {
   const [keyword, setKeyword] = useState("");
   const [jobData, setJobData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const location = useLocation(); 
   // Hàm xử lý sự kiện khi bấm vào nút tìm kiếm
-  const handleSearch = async () => {
+  const handleSearch1 = async () => {
     if (!keyword) return;
 
     setLoading(true);
@@ -31,6 +31,33 @@ const Home = () => {
       setLoading(false);
     }
   };
+  const handleSearch = async (searchKeyword) => {
+    if (!searchKeyword) return; // Nếu không có từ khóa thì không gọi API
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/jobs/search",
+        {
+          keyword: searchKeyword, // Gửi từ khóa tìm kiếm
+        }
+      );
+      setJobData(response.data.data); // Lưu dữ liệu tìm kiếm vào state
+    } catch (error) {
+      console.error("Error fetching job data: ", error);
+    } finally {
+      setLoading(false); // Kết thúc trạng thái loading
+    }
+  };
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get("search"); // Lấy giá trị từ khóa tìm kiếm
+
+    // if (searchParam) {
+      setKeyword(searchParam); // Cập nhật state `keyword` nếu có từ khóa trong URL
+      handleSearch(searchParam); // Gọi API với từ khóa tìm kiếm
+    // }
+  }, [location.search]);
   const handleJobClick = (companyName) => {
     navigate(`/detail/${companyName}`);
   };
@@ -65,7 +92,7 @@ const Home = () => {
               />
             </div>
 
-            <button className="search-button" onClick={handleSearch}>
+            <button className="search-button" onClick={handleSearch1}>
               Tìm kiếm
             </button>
 
